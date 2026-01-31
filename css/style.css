@@ -1,3 +1,6 @@
+/* =========================================
+   CORE VARIABLES & RESET
+   ========================================= */
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
@@ -17,44 +20,13 @@ body {
     font-family: var(--font-main);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    cursor: none;
-    /* Custom cursor or just hide it for the kinetic feel? Let's hide standard and maybe add custom dot later. For now, system cursor is fine but maybe 'crosshair' */
     cursor: auto;
+    /* Default system cursor */
 }
 
-/* --- Floating Preview --- */
-.preview-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: auto;
-    /* Auto-size to image */
-    height: auto;
-    max-width: 50vw;
-    /* Limit max size */
-    max-height: 70vh;
-    z-index: 10;
-    pointer-events: none;
-    opacity: 0;
-    transform-origin: center center;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-}
-
-.preview-container.visible {
-    opacity: 1;
-}
-
-#preview-image {
-    width: auto;
-    height: auto;
-    max-width: 50vw;
-    max-height: 70vh;
-    object-fit: contain;
-    /* No cropping - full image */
-    display: block;
-}
-
-/* --- Header --- */
+/* =========================================
+   HEADER & NAVIGATION
+   ========================================= */
 header {
     padding: 40px;
     display: flex;
@@ -64,12 +36,15 @@ header {
     top: 0;
     width: 100%;
     z-index: 250;
-    /* Above overlays */
+    /* Topmost layer (except lightbox) */
     mix-blend-mode: difference;
+    /* Invert colors over content */
     color: #fff;
     pointer-events: none;
+    /* Let clicks pass through empty space */
 }
 
+/* Re-enable pointer events for interactive elements */
 header * {
     pointer-events: auto;
 }
@@ -94,7 +69,9 @@ nav a {
     font-weight: 600;
 }
 
-/* --- Main Content --- */
+/* =========================================
+   MAIN CONTENT & PROJECT LIST
+   ========================================= */
 main {
     padding: 160px 0;
     width: 100%;
@@ -102,22 +79,19 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* NO z-index here - let blend mode work across the page */
 }
 
 .project-list {
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* Text inverts against what's painted below (image or white bg) */
     position: relative;
     z-index: 20;
-    /* Above image (z-index 10) */
     mix-blend-mode: difference;
     color: #fff;
-    /* White inverts to black on white, stays light on dark */
 }
 
+/* Individual Project Row */
 .project-item {
     display: grid;
     grid-template-columns: 1fr auto auto;
@@ -139,7 +113,7 @@ main {
     padding: 20px 35px;
 }
 
-/* Typography */
+/* Typography specifics */
 .project-title {
     font-size: clamp(0.7rem, 1.25vw, 1.5rem);
     font-weight: 800;
@@ -149,7 +123,6 @@ main {
     pointer-events: none;
 }
 
-/* Date column (middle) */
 .project-date {
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -158,11 +131,9 @@ main {
     white-space: nowrap;
     min-width: 60px;
     text-align: left;
-    /* Moved left */
     color: inherit;
 }
 
-/* Tags column (right) */
 .project-tags {
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -174,8 +145,41 @@ main {
     color: inherit;
 }
 
-/* --- Overlays --- */
-/* Keep the Split Layout from before, it works well */
+/* =========================================
+   KINETIC PREVIEW (FLOATING IMAGE)
+   ========================================= */
+.preview-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-width: 50vw;
+    max-height: 70vh;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: center center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    /* Transition is handled by JS requestAnimationFrame for performance */
+}
+
+.preview-container.visible {
+    opacity: 1;
+}
+
+#preview-image {
+    width: auto;
+    height: auto;
+    max-width: 50vw;
+    max-height: 70vh;
+    object-fit: contain;
+    display: block;
+}
+
+/* =========================================
+   OVERLAY: PROJECT DETAILS & ABOUT
+   ========================================= */
 .overlay {
     background: #fff;
     color: #000;
@@ -195,11 +199,11 @@ main {
     pointer-events: auto;
 }
 
+/* Back Button (Unified) */
 .back-btn {
     position: fixed;
     top: 30px;
     left: 40px;
-    /* Move to left side */
     background: none;
     color: #000;
     border: none;
@@ -216,6 +220,7 @@ main {
     opacity: 0.5;
 }
 
+/* Split Layout for Project Detail */
 .overlay-content.split-layout {
     display: grid;
     grid-template-columns: 35% 65%;
@@ -229,21 +234,20 @@ main {
     overflow-y: auto;
 }
 
-/* Aspect-Ratio Flex Gallery */
+/* Gallery (Right Side) */
 .gallery {
     padding: 100px 40px 60px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    /* Thin gap between rows */
+    /* Thin grid gap */
     background: #fff;
 }
 
 .gallery-row {
     display: flex;
     gap: 4px;
-    /* Thin gap between images */
 }
 
 .gallery-item {
@@ -253,10 +257,10 @@ main {
     overflow: hidden;
     cursor: pointer;
     border: 1px solid #e0e0e0;
-    /* Thin border */
 }
 
-.gallery-item img {
+.gallery-item img,
+.gallery-item video {
     display: block;
     width: 100%;
     height: 100%;
@@ -268,7 +272,126 @@ main {
     transform: scale(1.03);
 }
 
-/* Lightbox */
+/* Project Metadata Styles */
+#overlay-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: none;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+#overlay-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+}
+
+#overlay-meta .meta-date,
+#overlay-meta .meta-tags,
+.meta-link {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+}
+
+#overlay-meta .meta-date {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+#overlay-meta .meta-tags {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.meta-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+    margin-left: 15px;
+}
+
+.meta-link:hover {
+    border-bottom-color: #000;
+}
+
+#overlay-description {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+#overlay-description p {
+    margin-bottom: 1em;
+}
+
+/* About Layout Specifics */
+.overlay-content.about-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 120px 50px 80px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+#about-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000;
+}
+
+/* Basic markdown styling for About text */
+#about-description {
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+#about-description p {
+    margin-bottom: 1.5em;
+}
+
+#about-description h2 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+#about-description ul {
+    list-style: none;
+    padding: 0;
+}
+
+#about-description li {
+    margin-bottom: 10px;
+}
+
+#about-description a {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+}
+
+#about-description a:hover {
+    border-color: #000;
+}
+
+/* =========================================
+   LIGHTBOX
+   ========================================= */
 .lightbox {
     position: fixed;
     top: 0;
@@ -296,54 +419,10 @@ main {
     object-fit: contain;
 }
 
-.lightbox-close {
-    position: absolute;
-    top: 30px;
-    left: 40px;
-    /* Top-left corner */
-    color: #fff;
-    font-size: 1rem;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
-
-.lightbox-close:hover {
-    opacity: 1;
-}
-
-.lightbox-prev,
-.lightbox-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 2rem;
-    font-family: var(--font-mono);
-    cursor: pointer;
-    padding: 20px;
-    z-index: 310;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
-
-.lightbox-prev:hover,
-.lightbox-next:hover {
-    opacity: 1;
-}
-
-.lightbox-prev {
-    left: 20px;
-}
-
-.lightbox-next {
-    right: 20px;
+#lightbox-video {
+    max-width: 90vw;
+    max-height: 90vh;
+    outline: none;
 }
 
 #lightbox-content-wrapper {
@@ -354,137 +433,55 @@ main {
     height: 100%;
 }
 
-#lightbox-video {
-    max-width: 90vw;
-    max-height: 90vh;
-    outline: none;
-}
-
-/* About Layout */
-.overlay-content.about-content {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 120px 50px 80px;
-    overflow-y: auto;
-    height: 100vh;
-}
-
-#about-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 30px;
-    /* Reduced spacing */
-    text-transform: none;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #000;
-}
-
-#overlay-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-transform: none;
-    line-height: 1;
-    letter-spacing: -0.02em;
-}
-
-#overlay-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #000;
-    padding-bottom: 15px;
-    margin-bottom: 40px;
-}
-
-#overlay-meta .meta-date {
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    background: none;
+    border: none;
+    color: #fff;
     font-family: var(--font-mono);
-    font-size: 0.9rem;
-    font-weight: 400;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
     text-transform: uppercase;
 }
 
-#overlay-meta .meta-tags {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.meta-link {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #000;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-    margin-left: 15px; /* Add spacing if not using flex gap */
-}
-
-.meta-link:hover {
-    border-bottom-color: #000;
-}
-
-#about-description {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    letter-spacing: 0.01em;
-}
-
-#about-description p {
-    margin-bottom: 1.5em;
-}
-
-#about-description h2 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 50px;
-    margin-bottom: 20px;
-    color: #666;
-}
-
-#about-description ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#about-description li {
-    margin-bottom: 10px;
-}
-
-#about-description a {
-    color: #000;
-    text-decoration: none;
-    border-bottom: 1px solid #ccc;
-    transition: border-color 0.2s;
-}
-
-#about-description a:hover {
-    border-color: #000;
-}
-
-#overlay-description {
+.lightbox-close {
+    top: 30px;
+    left: 40px;
     font-size: 1rem;
-    line-height: 1.6;
 }
 
-#overlay-description p {
-    margin-bottom: 1em;
+.lightbox-prev {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    padding: 20px;
+    z-index: 310;
 }
 
-/* Responsive */
+.lightbox-next {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    padding: 20px;
+    z-index: 310;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    opacity: 1;
+}
+
+
+/* =========================================
+   RESPONSIVE (MOBILE)
+   ========================================= */
 @media (max-width: 900px) {
-
-    /* Header */
     header {
         padding: 20px;
     }
@@ -494,68 +491,53 @@ main {
         font-size: 0.8rem;
     }
 
-    /* Main Padding */
     main {
         padding: 100px 0;
     }
 
+    /* Disable floating kinetic preview on mobile */
     .preview-container {
         display: none !important;
     }
 
-    /* Project List */
-    /* Project List */
+    /* Stack project list */
     .project-item {
         display: flex;
         flex-direction: row;
-        /* Allow row layout */
         flex-wrap: wrap;
-        /* Wrap children */
         align-items: baseline;
         padding: 25px 20px;
-        /* Added horizontal padding */
         gap: 0;
-        /* Clear gap, manage with margins */
     }
 
     .project-item:hover {
         padding: 25px 20px;
-        /* Keep padding consistent */
-        background: none;
+        /* Disable expansion on mobile */
     }
 
     .project-title {
         font-size: 1.8rem;
         width: 100%;
-        /* Full width forces break */
         margin-bottom: 8px;
-        /* Space above meta line */
+        /* Break line */
     }
 
-    /* Meta text on mobile - Row */
     .project-date {
-        text-align: left;
-        padding-right: 0;
-        min-width: 0;
-        font-size: 0.8rem;
         flex: 0 0 auto;
-        /* Allow auto width */
+        text-align: left;
+        font-size: 0.8rem;
     }
 
     .project-tags {
-        text-align: right;
-        min-width: 0;
-        font-size: 0.8rem;
         flex: 1 0 auto;
-        /* Grow to fill space */
+        text-align: right;
+        font-size: 0.8rem;
         margin-left: auto;
-        /* Push to right edge */
     }
 
-    /* Overlays */
+    /* Stack Overlays */
     .overlay-content.split-layout {
         display: flex;
-        /* Override grid */
         flex-direction: column;
         height: auto;
     }
@@ -578,17 +560,15 @@ main {
 
     .overlay {
         overflow-y: auto;
-        /* Scroll the whole overlay */
     }
 
+    /* Scroll entire page */
     .back-btn {
         top: 20px;
         left: 20px;
         z-index: 300;
-        /* Ensure visibility */
     }
 
-    /* About */
     .overlay-content.about-content {
         padding: 100px 20px 60px;
     }
