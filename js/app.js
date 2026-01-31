@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close when clicking outside content (on the dark/white backdrop)
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeProject(); });
-    aboutOverlay.addEventListener('click', (e) => { if (e.target === aboutOverlay) closeAbout(); });
+    // aboutOverlay.addEventListener('click', (e) => { if (e.target === aboutOverlay) closeAbout(); });
 
     // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {

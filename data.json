@@ -149,6 +149,11 @@
       "images": [
         {
           "type": "image",
+          "full": "projects/Traces - Editorial Project/01_Samuele_Mogno_B1.jpg",
+          "thumb": "projects/Traces - Editorial Project/compressed/01_Samuele_Mogno_B1.jpg"
+        },
+        {
+          "type": "image",
           "full": "projects/Traces - Editorial Project/s1.png",
           "thumb": "projects/Traces - Editorial Project/compressed/s1.png"
         },
@@ -171,11 +176,6 @@
           "type": "image",
           "full": "projects/Traces - Editorial Project/s5.png",
           "thumb": "projects/Traces - Editorial Project/compressed/s5.png"
-        },
-        {
-          "type": "image",
-          "full": "projects/Traces - Editorial Project/Samuele_Mogno_B1.jpg",
-          "thumb": "projects/Traces - Editorial Project/compressed/Samuele_Mogno_B1.jpg"
         }
       ],
       "date": "2025",

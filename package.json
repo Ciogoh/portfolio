@@ -7,13 +7,11 @@
   },
   "keywords": [
     "portfolio",
-    "design",
     "javascript",
-    "creative-coding"
   ],
   "author": "SamuFluss",
   "license": "ISC",
-  "description": "Design student portfolio bridging design and code. Built with vanilla JS and Node.js.",
+  "description": "personal portfolio",
   "homepage": "https://ciogoh.github.io/portfolio",
   "dependencies": {
     "marked": "^17.0.1",

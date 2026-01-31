@@ -64,6 +64,7 @@ async function scanProjects() {
 
         const files = fs.readdirSync(itemPath);
         const projectImages = []; // Stores { thumb, full, type }
+        const validCompressedFiles = new Set(); // Track used compressed files
 
         for (const file of files) {
             const ext = path.extname(file).toLowerCase();
@@ -80,6 +81,8 @@ async function scanProjects() {
                     await processImage(filePath, compressedFilePath);
                 }
 
+                validCompressedFiles.add(file);
+
                 projectImages.push({
                     type: 'image',
                     full: `projects/${item}/${file}`,
@@ -93,6 +96,22 @@ async function scanProjects() {
                     full: `projects/${item}/${file}`,
                     thumb: `projects/${item}/${file}`
                 });
+            }
+        }
+
+        // --- Cleanup Unused Compressed Files ---
+        if (fs.existsSync(compressedDir)) {
+            const existingCompressed = fs.readdirSync(compressedDir);
+            for (const cFile of existingCompressed) {
+                if (!validCompressedFiles.has(cFile)) {
+                    const cPath = path.join(compressedDir, cFile);
+                    try {
+                        fs.unlinkSync(cPath);
+                        console.log(`Removed unused file: ${cPath}`);
+                    } catch (err) {
+                        console.error(`Error removing file ${cPath}:`, err);
+                    }
+                }
             }
         }
 
