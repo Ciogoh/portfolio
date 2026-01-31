@@ -126,13 +126,41 @@ async function restoreOriginalsAndScan() {
 
             // Read Metadata
             const infoPath = path.join(itemPath, 'info.json');
+            const packagePath = path.join(itemPath, 'package.json');
+
+            // Initialize with defaults
+            projectData.website = "";
+            projectData.github = "";
+
+            // Try reading package.json first (standard node/github metadata)
+            if (fs.existsSync(packagePath)) {
+                try {
+                    const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+                    projectData.title = projectData.title || pkg.name;
+                    projectData.description = pkg.description || "";
+                    projectData.website = pkg.homepage || "";
+                    if (pkg.repository) {
+                        projectData.github = (typeof pkg.repository === 'string') ?
+                            pkg.repository : pkg.repository.url;
+                        // Clean up git+https or .git
+                        projectData.github = projectData.github.replace(/^git\+/, '').replace(/\.git$/, '');
+                    }
+                    if (pkg.keywords && Array.isArray(pkg.keywords)) {
+                        projectData.tags = pkg.keywords;
+                    }
+                } catch (err) { console.warn(`Warning: Invalid package.json in ${item}`); }
+            }
+
+            // info.json overrides package.json if present (custom manual override)
             if (fs.existsSync(infoPath)) {
                 try {
                     const info = JSON.parse(fs.readFileSync(infoPath, 'utf8'));
                     projectData.title = info.title || projectData.title;
-                    projectData.description = info.description || "";
-                    projectData.date = info.date || "";
-                    projectData.tags = info.tags || [];
+                    projectData.description = info.description || projectData.description;
+                    projectData.date = info.date || projectData.date;
+                    projectData.tags = info.tags || projectData.tags;
+                    projectData.website = info.website || projectData.website;
+                    projectData.github = info.github || projectData.github;
                 } catch (err) { console.warn(`Warning: Invalid info.json in ${item}`); }
             }
 

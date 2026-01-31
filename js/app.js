@@ -285,12 +285,37 @@ document.addEventListener('DOMContentLoaded', () => {
         dateEl.className = 'meta-date';
         dateEl.textContent = project.date || '2025'; // Default or empty
 
-        const tagsEl = document.createElement('span');
-        tagsEl.className = 'meta-tags';
-        tagsEl.textContent = project.tags.join(' • ').toUpperCase();
+        const metaRight = document.createElement('div');
+        metaRight.style.display = 'flex';
+        metaRight.style.alignItems = 'center';
+
+        if (project.tags && project.tags.length > 0) {
+            const tagsEl = document.createElement('span');
+            tagsEl.className = 'meta-tags';
+            tagsEl.textContent = project.tags.join(' • ').toUpperCase();
+            metaRight.appendChild(tagsEl);
+        }
+
+        if (project.website) {
+            const webLink = document.createElement('a');
+            webLink.href = project.website;
+            webLink.target = '_blank';
+            webLink.textContent = 'WEBSITE ↗';
+            webLink.className = 'meta-link';
+            metaRight.appendChild(webLink);
+        }
+
+        if (project.github) {
+            const gitLink = document.createElement('a');
+            gitLink.href = project.github;
+            gitLink.target = '_blank';
+            gitLink.textContent = 'GITHUB ↗';
+            gitLink.className = 'meta-link';
+            metaRight.appendChild(gitLink);
+        }
 
         overlayMeta.appendChild(dateEl);
-        overlayMeta.appendChild(tagsEl);
+        overlayMeta.appendChild(metaRight);
 
         overlayDesc.innerHTML = project.description;
 

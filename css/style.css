@@ -414,6 +414,23 @@ main {
     letter-spacing: 0.05em;
 }
 
+.meta-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+    margin-left: 15px; /* Add spacing if not using flex gap */
+}
+
+.meta-link:hover {
+    border-bottom-color: #000;
+}
+
 #about-description {
     font-size: 0.95rem;
     line-height: 1.8;

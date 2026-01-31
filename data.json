@@ -40,7 +40,9 @@
       "tags": [
         "Game",
         "Product"
-      ]
+      ],
+      "website": "",
+      "github": ""
     },
     {
       "id": "Illustrator Vectors",
@@ -87,7 +89,9 @@
       "tags": [
         "Visual Communication",
         "Drawings"
-      ]
+      ],
+      "website": "",
+      "github": ""
     },
     {
       "id": "Lierna Chair Model",
@@ -134,7 +138,9 @@
       "tags": [
         "Model",
         "Product"
-      ]
+      ],
+      "website": "",
+      "github": ""
     },
     {
       "id": "Traces - Editorial Project",
@@ -175,7 +181,9 @@
       "date": "2025",
       "tags": [
         "Editorial"
-      ]
+      ],
+      "website": "",
+      "github": ""
     }
   ],
   "about": "<p>Design student based in Bolzano, working between design and code.</p>\n<p>I explore how words become rules, and rules become visuals through creative coding and AI-assisted processes.</p>\n<p>Building minimal, functional websites where structure and intuition coexist.</p>\n<p><a href=\"mailto:mogno.samu@gmail.com\">mogno.samu@gmail.com</a></p>\n"
