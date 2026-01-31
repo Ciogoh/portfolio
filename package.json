@@ -5,10 +5,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "portfolio",
+    "design",
+    "javascript",
+    "creative-coding"
+  ],
+  "author": "SamuFluss",
   "license": "ISC",
-  "description": "",
+  "description": "Design student portfolio bridging design and code. Built with vanilla JS and Node.js.",
+  "homepage": "https://ciogoh.github.io/portfolio",
   "dependencies": {
     "marked": "^17.0.1",
     "sharp": "^0.34.5"
