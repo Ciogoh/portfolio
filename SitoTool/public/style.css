@@ -1,0 +1,189 @@
+:root {
+    --bg-color: #050505;
+    --text-color: #888;
+    --highlight: #e0e0e0;
+    --accent: #00ff41;
+    /* CRT Green */
+    --hover-bg: #111;
+    --font-mono: 'Courier New', Courier, monospace;
+    --border: 1px solid #222;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.4;
+    overflow-x: hidden;
+    padding: 2rem;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+/* Layout */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    margin-bottom: 3rem;
+    border-bottom: var(--border);
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.logo {
+    color: var(--highlight);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.meta-info {
+    font-size: 11px;
+    text-align: right;
+}
+
+/* Search */
+.search-wrapper {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    border-bottom: var(--border);
+}
+
+.prompt {
+    color: var(--accent);
+    margin-right: 10px;
+    user-select: none;
+}
+
+#search {
+    background: transparent;
+    border: none;
+    color: var(--highlight);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    width: 100%;
+    padding: 10px 0;
+    outline: none;
+}
+
+/* List */
+.file-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-header {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px;
+    padding: 5px 10px;
+    border-bottom: var(--border);
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 1px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid #111;
+    transition: all 0.1s;
+    cursor: pointer;
+}
+
+.row:hover {
+    background: var(--hover-bg);
+    color: var(--highlight);
+}
+
+.row:hover .id {
+    color: var(--accent);
+}
+
+.id {
+    font-size: 11px;
+    opacity: 0.5;
+    align-self: center;
+}
+
+.title-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.desc {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 2px;
+    display: none;
+    /* Hidden by default, maybe show on hover? kept off for compactness */
+}
+
+.meta {
+    font-size: 11px;
+    text-align: right;
+    align-self: center;
+    opacity: 0.5;
+}
+
+/* Glitch/Cursor Effect */
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+
+    .list-header,
+    .row {
+        grid-template-columns: 60px 1fr;
+    }
+
+    .meta,
+    .list-header span:last-child {
+        display: none;
+    }
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT ACCESS // ADMIN</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-panel {
+            border: 1px solid #333;
+            padding: 20px;
+            margin-bottom: 30px;
+            background: #090909;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        input,
+        textarea,
+        button {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            color: #ccc;
+            padding: 10px;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        button {
+            cursor: pointer;
+            background: #111;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 10px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .delete-btn:hover {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            color: var(--highlight);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .toggle-hidden {
+            color: #555;
+            cursor: pointer;
+        }
+
+        .is-hidden {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo"><a href="index.html" style="color:inherit;text-decoration:none;">ROOT_DIR</a> / ADMIN
+            </div>
+            <div class="meta-info">
+                MODE: READ_WRITE<br>
+                ACCESS: GRANTED
+            </div>
+        </header>
+
+        <!-- UPLOAD SECTION -->
+        <div class="admin-panel">
+            <h2>> INSTALL_PACKAGE</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>TITLE</label>
+                    <input type="text" name="title" id="inpTitle" required placeholder="My New Script">
+                </div>
+                <div class="form-group">
+                    <label>DESCRIPTION</label>
+                    <textarea name="description" placeholder="What does it do?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>TAGS (comma separated)</label>
+                    <input type="text" name="tags" placeholder="p5.js, visuals, test">
+                </div>
+
+                <!-- DROP ZONE -->
+                <div id="dropZone"
+                    style="border: 2px dashed #333; padding: 20px; text-align: center; margin-bottom: 15px; cursor: pointer; transition: 0.2s;">
+                    <p style="margin-bottom: 10px; color: #666;">DRAG FOLDER / ZIP HERE</p>
+                    <p style="font-size: 10px; color: #444;">OR CLICK TO BROWSE</p>
+                    <input type="file" id="fileInput" name="zipFile" style="display: none;" multiple>
+                </div>
+                <div id="fileInfo" style="font-size: 11px; color: var(--accent); margin-bottom: 15px; display: none;">
+                    SELECTED: <span id="fileName"></span>
+                </div>
+
+                <button type="submit" id="uploadBtn">>> EXECUTE UPLOAD</button>
+            </form>
+            <div id="uploadStatus" style="margin-top:10px; font-size:11px;"></div>
+        </div>
+
+        <!-- MANAGE SECTION -->
+        <div class="admin-panel">
+            <h2>> MANAGE_INSTALLED_PACKAGES</h2>
+            <div id="file-list" class="file-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JSZip for client-side zipping -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+        const list = document.getElementById('file-list');
+        const uploadForm = document.getElementById('uploadForm');
+        const statusDiv = document.getElementById('uploadStatus');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileNameSpan = document.getElementById('fileName');
+        const inpTitle = document.getElementById('inpTitle');
+
+        let pendingFile = null; // Can be a File (zip) or a JSZip object (folder)
+
+        // --- DRAG & DROP & FILE HANDLING ---
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.style.borderColor = 'var(--accent)', false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.style.borderColor = '#333', false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const items = e.dataTransfer.items;
+            if (items) handleDrop(items);
+        });
+
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+            const file = files[0];
+            // Basic check, assume zip if explicitly zip
+            if (file.type.includes('zip') || file.name.endsWith('.zip')) {
+                pendingFile = file;
+                showFile(file.name);
+            } else {
+                // If usage picked multiple files, OR a folder via supported input
+                await zipFiles(Array.from(files));
+            }
+        }
+
+        async function handleDrop(items) {
+            const entry = items[0].webkitGetAsEntry();
+            if (entry.isFile && entry.name.endsWith('.zip')) {
+                entry.file(file => {
+                    pendingFile = file;
+                    showFile(file.name);
+                });
+            } else if (entry.isDirectory) {
+                statusDiv.innerHTML = '<span style="color:yellow">> ZIPPING_FOLDER...</span>';
+                await zipDirectory(entry);
+                statusDiv.innerHTML = '<span style="color:var(--accent)">> READY_TO_UPLOAD</span>';
+            } else if (entry.isFile) {
+                statusDiv.innerHTML = '<span style="color:red">> ERROR: PLEASE_DROP_FOLDER_OR_ZIP</span>';
+            }
+        }
+
+        async function zipDirectory(dirEntry) {
+            const zip = new JSZip();
+            // Try to auto-fill title from folder name
+            inpTitle.value = dirEntry.name.replace(/_/g, ' ');
+
+            async function readDir(dir, zipRoot) {
+                const reader = dir.createReader();
+                const entries = await new Promise(resolve => {
+                    reader.readEntries(res => resolve(res));
+                });
+
+                for (const entry of entries) {
+                    if (entry.isFile) {
+                        const file = await new Promise(resolve => entry.file(resolve));
+                        zipRoot.file(entry.name, file);
+                    } else if (entry.isDirectory) {
+                        const newZipFolder = zipRoot.folder(entry.name);
+                        await readDir(entry, newZipFolder);
+                    }
+                }
+            }
+
+            await readDir(dirEntry, zip);
+
+            pendingFile = await zip.generateAsync({ type: 'blob' });
+            showFile(dirEntry.name + '.zip');
+        }
+
+        async function zipFiles(fileList) {
+            const zip = new JSZip();
+            // Check if one file and it's zip
+            if (fileList.length === 1 && fileList[0].name.endsWith('.zip')) {
+                pendingFile = fileList[0];
+                showFile(fileList[0].name);
+                return;
+            }
+
+            // If multiple files, zip them
+            for (const f of fileList) {
+                zip.file(f.webkitRelativePath || f.name, f);
+            }
+            pendingFile = await zip.generateAsync({ type: 'blob' });
+            showFile('collection.zip');
+        }
+
+        function showFile(name) {
+            fileInfo.style.display = 'block';
+            fileNameSpan.innerText = name;
+        }
+
+        // --- UPLOAD LOGIC ---
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!pendingFile) {
+                alert('NO FILE SELECTED');
+                return;
+            }
+
+            const btn = document.getElementById('uploadBtn');
+            btn.innerText = 'UPLOADING...';
+
+            const formData = new FormData(uploadForm);
+            formData.delete('zipFile');
+            formData.append('zipFile', pendingFile, 'upload.zip');
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    statusDiv.innerHTML = '<span style="color:var(--accent)">> SUCCESS: PACKAGE_INSTALLED</span>';
+                    uploadForm.reset();
+                    fileInfo.style.display = 'none';
+                    pendingFile = null;
+                    inpTitle.value = ''; // Clear title
+                    loadTools();
+                } else {
+                    const errText = await res.text();
+                    console.error("Upload error:", errText);
+                    statusDiv.innerHTML = '<span style="color:red">> ERROR: INSTALL_FAILED</span>';
+                }
+            } catch (err) {
+                console.error(err);
+                statusDiv.innerHTML = '<span style="color:red">> ERROR: CONNECTION_LOST</span>';
+            }
+            btn.innerText = '>> EXECUTE UPLOAD';
+        });
+
+        // --- LIST MANAGEMENT (Same as before) ---
+        async function loadTools() {
+            try {
+                const res = await fetch('/api/tools?admin=true');
+                const tools = await res.json();
+
+                list.innerHTML = '';
+                tools.forEach(tool => {
+                    const row = document.createElement('div');
+                    row.className = 'row';
+                    row.style.gridTemplateColumns = '50px 1fr 150px';
+
+                    const hiddenClass = tool.hidden ? 'is-hidden' : '';
+
+                    row.innerHTML = `
+                        <div class="id">
+                            <button class="btn-sm delete-btn" onclick="deleteTool('${tool.id}')">X</button>
+                        </div>
+                        <div class="title-wrap ${hiddenClass}">
+                            <span class="title">${tool.title.toUpperCase()}</span>
+                            <span class="desc" style="display:block;">${tool.description} | [${tool.tags.join(', ')}]</span>
+                        </div>
+                        <div class="meta">
+                            <button class="btn-sm" onclick="toggleHide('${tool.id}', ${!tool.hidden})">
+                                ${tool.hidden ? 'UNHIDE' : 'HIDE'}
+                            </button>
+                        </div>
+                    `;
+                    list.appendChild(row);
+                });
+            } catch (e) {
+                console.error("Load tools error:", e);
+                list.innerHTML = '<div style="color:red">ERROR LOADING TOOLS</div>';
+            }
+        }
+
+        window.deleteTool = async (id) => {
+            if (!confirm('CONFIRM DELETION?')) return;
+            await fetch(`/api/tools/${id}`, { method: 'DELETE' });
+            loadTools();
+        };
+
+        window.toggleHide = async (id, hidden) => {
+            await fetch(`/api/tools/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hidden })
+            });
+            loadTools();
+        };
+
+        loadTools();
+    </script>
+</body>
+
+</html>

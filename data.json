@@ -1,0 +1,78 @@
+{
+  "projects": [
+    {
+      "id": "Holestello",
+      "title": "Holestello",
+      "description": "<p><strong>Holestello</strong> is a modular construction system based on repeated wooden elements, holes, elastics, and connectors. The system operates through bodily actions such as building, twisting, tightening, and releasing. Rhythm, tension, and repetition define how parts connect and transform. Simple components enable open-ended configurations, allowing structures to be assembled, adjusted, and reconfigured through slow, hands-on interaction within a compact scale.</p>\n",
+      "images": [
+        "projects/Holestello/WUP_PD_Small4600.jpg",
+        "projects/Holestello/WUP_PD_Small4601.jpg",
+        "projects/Holestello/WUP_PD_Small4603.jpg",
+        "projects/Holestello/WUP_PD_Small4606.jpg",
+        "projects/Holestello/WUP_PD_Small4607.jpg",
+        "projects/Holestello/WUP_PD_Small4610.jpg"
+      ],
+      "date": "2025",
+      "tags": [
+        "Game",
+        "Product"
+      ]
+    },
+    {
+      "id": "Illustrator Vectors",
+      "title": "Vector Icons",
+      "description": "<p>This introductory exercise focused on mastering the fundamentals of Adobe Illustrator by redesigning physical objects as minimalist pictograms.\nI focused on designing helmet icons and outlines, ensuring clear and immediate recognition.</p>\n",
+      "images": [
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0001.jpg",
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0002.jpg",
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0003.jpg",
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0004.jpg",
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0005.jpg",
+        "projects/Illustrator Vectors/06_Mogno_Samuele_page-0006.jpg",
+        "projects/Illustrator Vectors/prova.jpg"
+      ],
+      "date": "2025",
+      "tags": [
+        "Visual Communication",
+        "Drawings"
+      ]
+    },
+    {
+      "id": "Lierna Chair Model",
+      "title": "Lierna Chair Cardboard Model",
+      "description": "<p>The project consists of reproducing the Lierna chair using Finnish cardboard, with a strong focus on structure and proportions. The main model is built at a 1:2 scale, while a selected structural detail is reproduced at 1:1 scale to better investigate construction logic, material behavior, and construction clarity. The work emphasizes precision, cleanliness, and how cardboard can clearly express structural relationships.</p>\n",
+      "images": [
+        "projects/Lierna Chair Model/ModelM 1.jpg",
+        "projects/Lierna Chair Model/ModelM 2.jpg",
+        "projects/Lierna Chair Model/ModelM 3.jpg",
+        "projects/Lierna Chair Model/ModelM 4.jpg",
+        "projects/Lierna Chair Model/ModelM 5.jpg",
+        "projects/Lierna Chair Model/ModelM 6.jpg",
+        "projects/Lierna Chair Model/ModelM 7.jpg"
+      ],
+      "date": "2025",
+      "tags": [
+        "Model",
+        "Product"
+      ]
+    },
+    {
+      "id": "Traces - Editorial Project",
+      "title": "Traces - Editorial Project",
+      "description": "<p>From images, words, and open themes, magazines take shape. Typography marks time, layout records space. Fragments become rhythm, pages turn into visual narratives that extend beyond the image, lingering between gaze, thought, and material presence.</p>\n<p><strong>Traces - A visual research on movement, paths, and the marks they leave.</strong>\nEvery movement leaves a trace. Sometimes it becomes a path, a line carved by repetition, by choosing the same way again and again. Other times it appears as a mark: a momentary gesture, a curve drawn in passing, almost disappearing as soon as it appears</p>\n<p>This book looks at both. At the terrains that shape how we move. At the paths that emerge because we cross them. At the flow built through bodies in motion, and at the marks that remain—intentional or accidental, fragile or persistent. A trace is never just a line. It is evidence, memory, direction, and possibility. It is where movement becomes visible.</p>\n",
+      "images": [
+        "projects/Traces - Editorial Project/Samuele_Mogno_B1.jpg",
+        "projects/Traces - Editorial Project/s1.png",
+        "projects/Traces - Editorial Project/s2.png",
+        "projects/Traces - Editorial Project/s3.png",
+        "projects/Traces - Editorial Project/s4.png",
+        "projects/Traces - Editorial Project/s5.png"
+      ],
+      "date": "2025",
+      "tags": [
+        "Editorial"
+      ]
+    }
+  ],
+  "about": "<p>Design student based in Bolzano, working between design and code.</p>\n<p>I explore how words become rules, and rules become visuals through creative coding and AI-assisted processes.</p>\n<p>Building minimal, functional websites where structure and intuition coexist.</p>\n<p><a href=\"mailto:mogno.samu@gmail.com\">mogno.samu@gmail.com</a></p>\n"
+}

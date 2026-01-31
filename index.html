@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Preview Image Container (Fullscreen Background) -->
+    <div id="preview-container" class="preview-container">
+        <img id="preview-image" src="" alt="">
+    </div>
+
+    <!-- Header (Fixed) -->
+    <header>
+        <a href="#" class="logo">SamuFluss</a>
+        <nav>
+            <a href="#" class="active">Work</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+    <main id="app">
+        <!-- List will be injected here -->
+        <div class="project-list" id="project-list"></div>
+    </main>
+
+    <!-- About Overlay -->
+    <div id="about-overlay" class="overlay hidden">
+        <div class="overlay-content about-content">
+            <!-- About content is simple, maybe not split, or strictly text centered? Using generic overlay-content -->
+            <div>
+                <h1 id="about-title">SamuFluss</h1>
+                <div id="about-description"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Overlay -->
+    <div id="project-overlay" class="overlay hidden">
+        <div class="overlay-content split-layout">
+            <div class="project-text-column">
+                <h1 id="overlay-title"></h1>
+                <p id="overlay-meta"></p>
+                <div id="overlay-description"></div>
+            </div>
+            <div id="overlay-gallery" class="gallery"></div>
+        </div>
+    </div>
+
+    <!-- Lightbox for fullscreen images -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close">← Close</button>
+        <button class="lightbox-prev" aria-label="Previous">←</button>
+        <button class="lightbox-next" aria-label="Next">→</button>
+        <div id="lightbox-content-wrapper">
+            <img id="lightbox-img" src="" alt="">
+            <video id="lightbox-video" controls style="display: none;"></video>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

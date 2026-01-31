@@ -1,0 +1,2 @@
+This introductory exercise focused on mastering the fundamentals of Adobe Illustrator by redesigning physical objects as minimalist pictograms.
+I focused on designing helmet icons and outlines, ensuring clear and immediate recognition.

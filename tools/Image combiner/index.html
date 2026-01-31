@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Res Image Merger</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+</head>
+
+<body>
+
+    <!-- Sidebar Controls -->
+    <div id="sidebar">
+        <h2>Image Merger</h2>
+
+        <div class="control-group">
+            <label>1. Upload Base Image (Img A)</label>
+            <input type="file" id="uploadA" accept="image/jpeg, image/png, image/webp">
+        </div>
+
+        <div class="control-group">
+            <label>2. Upload Merge Image (Img B)</label>
+            <input type="file" id="uploadB" accept="image/jpeg, image/png, image/webp">
+        </div>
+
+        <hr>
+
+        <div class="control-group">
+            <label>Mode</label>
+            <select id="modeSelect">
+                <option value="OVERLAY">Overlay (Blend)</option>
+                <option value="STITCH_H">Stitch Horizontal</option>
+                <option value="STITCH_V">Stitch Vertical</option>
+            </select>
+        </div>
+
+        <div id="overlayControls">
+            <div class="control-group">
+                <label>Opacity (Img B)</label>
+                <input type="range" id="opacitySlider" min="0" max="255" value="128">
+            </div>
+            <div class="control-group">
+                <label>Scale (Img B)</label>
+                <input type="range" id="scaleSlider" min="0.1" max="3.0" step="0.01" value="1.0">
+            </div>
+            <div class="info-text">
+                > Drag canvas to move Img B<br>
+                > Mouse wheel to scale (Overlay mode only)
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <button id="downloadBtn" class="primary-btn">DOWNLOAD FULL RES</button>
+        <div id="statusMsg">Ready</div>
+    </div>
+
+    <!-- Main Preview Area -->
+    <div id="canvas-container">
+        <!-- p5 canvas injects here -->
+    </div>
+
+    <script src="sketch.js"></script>
+</body>
+
+</html>

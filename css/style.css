@@ -1,0 +1,488 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    cursor: none;
+    /* Custom cursor or just hide it for the kinetic feel? Let's hide standard and maybe add custom dot later. For now, system cursor is fine but maybe 'crosshair' */
+    cursor: auto;
+}
+
+/* --- Floating Preview --- */
+.preview-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: auto;
+    /* Auto-size to image */
+    height: auto;
+    max-width: 50vw;
+    /* Limit max size */
+    max-height: 70vh;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: center center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.preview-container.visible {
+    opacity: 1;
+}
+
+#preview-image {
+    width: auto;
+    height: auto;
+    max-width: 50vw;
+    max-height: 70vh;
+    object-fit: contain;
+    /* No cropping - full image */
+    display: block;
+}
+
+/* --- Header --- */
+header {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 250;
+    /* Above overlays */
+    mix-blend-mode: difference;
+    color: #fff;
+    pointer-events: none;
+}
+
+header * {
+    pointer-events: auto;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* --- Main Content --- */
+main {
+    padding: 160px 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* NO z-index here - let blend mode work across the page */
+}
+
+.project-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* Text inverts against what's painted below (image or white bg) */
+    position: relative;
+    z-index: 20;
+    /* Above image (z-index 10) */
+    mix-blend-mode: difference;
+    color: #fff;
+    /* White inverts to black on white, stays light on dark */
+}
+
+.project-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    /* Title | Date | Tags */
+    align-items: center;
+    gap: 40px;
+    padding: 8px 15px;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1px solid #fff;
+    transition: padding 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.project-item:first-child {
+    border-top: 1px solid #fff;
+}
+
+.project-item:hover {
+    padding: 20px 35px;
+}
+
+/* Typography */
+.project-title {
+    font-size: clamp(0.7rem, 1.25vw, 1.5rem);
+    font-weight: 800;
+    text-transform: none;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    pointer-events: none;
+}
+
+/* Date column (middle) */
+.project-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    min-width: 60px;
+    text-align: left;
+    /* Moved left */
+    color: inherit;
+}
+
+/* Tags column (right) */
+.project-tags {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+    min-width: 150px;
+    text-align: right;
+    color: inherit;
+}
+
+/* --- Overlays --- */
+/* Keep the Split Layout from before, it works well */
+.overlay {
+    background: #fff;
+    color: #000;
+    z-index: 200;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-btn {
+    position: fixed;
+    top: 30px;
+    left: 40px;
+    /* Move to left side */
+    background: none;
+    color: #000;
+    border: none;
+    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    z-index: 210;
+    transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+    opacity: 0.5;
+}
+
+.overlay-content.split-layout {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    height: 100vh;
+    width: 100%;
+}
+
+.project-text-column {
+    padding: 100px 50px 60px;
+    border-right: 1px solid #eee;
+    overflow-y: auto;
+}
+
+/* Aspect-Ratio Flex Gallery */
+.gallery {
+    padding: 100px 40px 60px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Thin gap between rows */
+    background: #fff;
+}
+
+.gallery-row {
+    display: flex;
+    gap: 4px;
+    /* Thin gap between images */
+}
+
+.gallery-item {
+    flex-basis: 0;
+    flex-grow: var(--ratio, 1);
+    aspect-ratio: var(--ratio, 1);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    /* Thin border */
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.03);
+}
+
+/* Lightbox */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    /* Top-left corner */
+    color: #fff;
+    font-size: 1rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.lightbox-close:hover {
+    opacity: 1;
+}
+
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    padding: 20px;
+    z-index: 310;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    opacity: 1;
+}
+
+.lightbox-prev {
+    left: 20px;
+}
+
+.lightbox-next {
+    right: 20px;
+}
+
+#lightbox-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#lightbox-video {
+    max-width: 90vw;
+    max-height: 90vh;
+    outline: none;
+}
+
+/* About Layout */
+.overlay-content.about-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 120px 50px 80px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+#about-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    /* Reduced spacing */
+    text-transform: none;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000;
+}
+
+#overlay-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: none;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+#overlay-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #000;
+}
+
+#about-description {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+}
+
+#about-description p {
+    margin-bottom: 1.5em;
+}
+
+#about-description h2 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+#about-description ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#about-description li {
+    margin-bottom: 10px;
+}
+
+#about-description a {
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+    transition: border-color 0.2s;
+}
+
+#about-description a:hover {
+    border-color: #000;
+}
+
+#overlay-description {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+#overlay-description p {
+    margin-bottom: 1em;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .preview-container {
+        display: none !important;
+    }
+
+    /* No Hover on mobile */
+    .project-title {
+        font-size: 2.5rem;
+    }
+
+    .project-item {
+        padding: 30px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .project-item:hover {
+        padding: 30px;
+    }
+
+    .overlay-content.split-layout {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-text-column,
+    .gallery {
+        padding: 40px 20px;
+        height: auto;
+        overflow: visible;
+    }
+
+    .overlay {
+        overflow-y: auto;
+    }
+}

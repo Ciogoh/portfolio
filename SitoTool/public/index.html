@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCRIPTS.ARCHIVE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ROOT_DIR</div>
+            <div class="meta-info">
+                USER: ADMIN <a href="admin.html" style="color: #444; text-decoration: none;">[MANAGE]</a><br>
+                STATUS: ONLINE
+            </div>
+        </header>
+
+        <div class="search-wrapper">
+            <span class="prompt">$ search_query</span>
+            <input type="text" id="search" placeholder="_" autocomplete="off">
+        </div>
+
+        <main>
+            <div class="list-header">
+                <span>PERM</span>
+                <span>FILENAME</span>
+                <span>MODIFIED</span>
+            </div>
+            <div id="file-list" class="file-list">
+                <!-- Rows injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Load Logic -->
+    <script src="main.js"></script>
+</body>
+
+</html>
