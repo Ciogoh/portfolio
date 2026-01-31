@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Show first image immediately
                 if (project.images.length > 0) {
-                    previewImage.src = project.images[0];
+                    previewImage.src = project.images[0].thumb;
 
                     // Start Slideshow if more than 1 image
                     if (project.images.length > 1) {
                         slideshowInterval = setInterval(() => {
                             currentImageIndex = (currentImageIndex + 1) % project.images.length;
-                            previewImage.src = project.images[currentImageIndex];
+                            previewImage.src = project.images[currentImageIndex].thumb;
                         }, 700); // Change every 1 second
                     }
                 }
@@ -205,9 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLightboxContent() {
-        const src = currentProjectImages[currentLightboxIndex];
+        const item = currentProjectImages[currentLightboxIndex];
+        const src = item.full;
 
-        if (isVideo(src)) {
+        if (item.type === 'video' || isVideo(src)) {
             lightboxImg.style.display = 'none';
             lightboxVideo.style.display = 'block';
             lightboxVideo.src = src;
@@ -264,14 +265,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
+        // Close if clicking the background (lightbox container) or the content wrapper itself (if padding/centering area is clicked)
+        // But NOT if clicking the image, video, or nav buttons (unless buttons have their own handlers, which they do)
+        // Actually, nav buttons have their own handlers.
+        // We want to avoid closing if clicking image or video.
+        if (e.target === lightbox || e.target === lightboxContent) {
+            closeLightbox();
+        }
     });
 
     function openProject(project) {
         closeAbout();
         overlayTitle.textContent = project.title;
+
+        // Clear and rebuild meta
+        overlayMeta.innerHTML = '';
+
+        const dateEl = document.createElement('span');
+        dateEl.className = 'meta-date';
+        dateEl.textContent = project.date || '2025'; // Default or empty
+
+        const tagsEl = document.createElement('span');
+        tagsEl.className = 'meta-tags';
+        tagsEl.textContent = project.tags.join(' • ').toUpperCase();
+
+        overlayMeta.appendChild(dateEl);
+        overlayMeta.appendChild(tagsEl);
+
         overlayDesc.innerHTML = project.description;
-        overlayMeta.textContent = project.tags.join(' • ') + (project.date ? ` — ${project.date}` : '');
 
         overlayGallery.innerHTML = '';
 
@@ -290,11 +311,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const item = document.createElement('div');
                 item.className = 'gallery-item';
 
-                const src = images[i];
+                const itemData = images[i];
+                const src = itemData.thumb; // Use thumb for gallery
                 const currentIndex = i; // Closure capture
 
                 let mediaEl;
-                if (isVideo(src)) {
+                if (itemData.type === 'video') {
                     mediaEl = document.createElement('video');
                     mediaEl.src = src;
                     mediaEl.muted = true;
@@ -354,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close on click outside content
     overlay.addEventListener('click', (e) => {
+        // The overlay has a child .overlay-content. We only want to close if clicking the overlay itself (dark background)
         if (e.target === overlay) closeProject();
     });
 

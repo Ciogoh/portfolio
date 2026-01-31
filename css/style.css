@@ -391,11 +391,27 @@ main {
 }
 
 #overlay-meta {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
     padding-bottom: 15px;
-    border-bottom: 1px solid #000;
+    margin-bottom: 40px;
+}
+
+#overlay-meta .meta-date {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+#overlay-meta .meta-tags {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 #about-description {
@@ -450,39 +466,119 @@ main {
 
 /* Responsive */
 @media (max-width: 900px) {
+
+    /* Header */
+    header {
+        padding: 20px;
+    }
+
+    nav a {
+        margin-left: 15px;
+        font-size: 0.8rem;
+    }
+
+    /* Main Padding */
+    main {
+        padding: 100px 0;
+    }
+
     .preview-container {
         display: none !important;
     }
 
-    /* No Hover on mobile */
-    .project-title {
-        font-size: 2.5rem;
-    }
-
+    /* Project List */
+    /* Project List */
     .project-item {
-        padding: 30px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
+        display: flex;
+        flex-direction: row;
+        /* Allow row layout */
+        flex-wrap: wrap;
+        /* Wrap children */
+        align-items: baseline;
+        padding: 25px 20px;
+        /* Added horizontal padding */
+        gap: 0;
+        /* Clear gap, manage with margins */
     }
 
     .project-item:hover {
-        padding: 30px;
+        padding: 25px 20px;
+        /* Keep padding consistent */
+        background: none;
     }
 
+    .project-title {
+        font-size: 1.8rem;
+        width: 100%;
+        /* Full width forces break */
+        margin-bottom: 8px;
+        /* Space above meta line */
+    }
+
+    /* Meta text on mobile - Row */
+    .project-date {
+        text-align: left;
+        padding-right: 0;
+        min-width: 0;
+        font-size: 0.8rem;
+        flex: 0 0 auto;
+        /* Allow auto width */
+    }
+
+    .project-tags {
+        text-align: right;
+        min-width: 0;
+        font-size: 0.8rem;
+        flex: 1 0 auto;
+        /* Grow to fill space */
+        margin-left: auto;
+        /* Push to right edge */
+    }
+
+    /* Overlays */
     .overlay-content.split-layout {
         display: flex;
+        /* Override grid */
         flex-direction: column;
+        height: auto;
     }
 
-    .project-text-column,
+    .project-text-column {
+        width: 100%;
+        padding: 80px 20px 40px;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        height: auto;
+        overflow: visible;
+    }
+
     .gallery {
-        padding: 40px 20px;
+        width: 100%;
+        padding: 40px 20px 80px;
         height: auto;
         overflow: visible;
     }
 
     .overlay {
         overflow-y: auto;
+        /* Scroll the whole overlay */
+    }
+
+    .back-btn {
+        top: 20px;
+        left: 20px;
+        z-index: 300;
+        /* Ensure visibility */
+    }
+
+    /* About */
+    .overlay-content.about-content {
+        padding: 100px 20px 60px;
+    }
+
+    #overlay-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
     }
 }

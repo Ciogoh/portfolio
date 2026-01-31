@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "marked": "^17.0.1"
+    "marked": "^17.0.1",
+    "sharp": "^0.34.5"
   }
 }
