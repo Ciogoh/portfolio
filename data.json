@@ -41,6 +41,7 @@
         "Game",
         "Product"
       ],
+      "collaborators": [],
       "website": "",
       "github": ""
     },
@@ -88,8 +89,10 @@
       "date": "2025",
       "tags": [
         "Visual Communication",
-        "Drawings"
+        "Drawings",
+        "Vectors"
       ],
+      "collaborators": [],
       "website": "",
       "github": ""
     },
@@ -139,6 +142,7 @@
         "Model",
         "Product"
       ],
+      "collaborators": [],
       "website": "",
       "github": ""
     },
@@ -182,6 +186,7 @@
       "tags": [
         "Editorial"
       ],
+      "collaborators": [],
       "website": "",
       "github": ""
     }

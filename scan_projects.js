@@ -128,6 +128,7 @@ async function scanProjects() {
             images: projectImages,
             date: "",
             tags: [],
+            collaborators: [],
             website: "",
             github: ""
         };
@@ -166,6 +167,7 @@ async function scanProjects() {
                 if (info.description) projectData.description = info.description;
                 if (info.date) projectData.date = info.date;
                 if (info.tags) projectData.tags = info.tags;
+                if (info.collaborators) projectData.collaborators = info.collaborators;
                 if (info.website) projectData.website = info.website;
                 if (info.github) projectData.github = info.github;
             } catch (err) {

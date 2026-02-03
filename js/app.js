@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const aboutContent = data.about || "";
 
             renderList(projectsData);
+            handleInitialRouting(projectsData);
 
             if (aboutContent && aboutDescContainer) {
                 aboutDescContainer.innerHTML = aboutContent;
@@ -131,15 +132,39 @@ document.addEventListener('DOMContentLoaded', () => {
             listContainer.innerHTML = '<p class="error">Could not load projects.</p>';
         });
 
+    function handleInitialRouting(projects) {
+        const hash = window.location.hash.substring(1); // Remove '#'
+        if (hash) {
+            const project = projects.find(p => createSlug(p.title) === hash);
+            if (project) {
+                openProject(project);
+            }
+        }
+
+        // Listen for back/forward navigation
+        window.addEventListener('hashchange', () => {
+            const currentHash = window.location.hash.substring(1);
+            if (!currentHash) {
+                closeProject();
+                closeAbout();
+            } else {
+                const project = projects.find(p => createSlug(p.title) === currentHash);
+                if (project) openProject(project);
+            }
+        });
+    }
+
     /**
      * Renders the list of projects into the main container
      */
     function renderList(projects) {
         listContainer.innerHTML = '';
-        projects.forEach(project => {
+        projects.forEach((project, index) => {
             const item = document.createElement('div');
             item.className = 'project-item';
             item.setAttribute('data-id', project.id);
+            // Staggered animation delay: 0.05s per item
+            item.style.animationDelay = `${index * 0.05}s`;
 
             // Structure: Title | Date | Tags
             const title = document.createElement('h2');
@@ -198,19 +223,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Routing Helper ---
+    function createSlug(text) {
+        return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+
     // --- Overlay Management ---
 
     function closeAllOverlays(e) {
         if (e) e.preventDefault();
         closeProject();
         closeAbout();
+        history.pushState("", document.title, window.location.pathname + window.location.search);
     }
 
     // 1. Project Overlay
     function openProject(project) {
         closeAbout(); // Ensure only one overlay is open
 
+        // Update URL hash for deep linking
+        window.location.hash = createSlug(project.title); // Using Title for cleaner URLs (usually same as ID but safer)
+
         // Populate Title
+
         overlayTitle.textContent = project.title;
 
         // Populate Metadata (Date + Tags + Links)
@@ -230,6 +265,16 @@ document.addEventListener('DOMContentLoaded', () => {
             tagsEl.className = 'meta-tags';
             tagsEl.textContent = project.tags.join(' • ').toUpperCase();
             metaRight.appendChild(tagsEl);
+        }
+
+        // Collaborators
+        if (project.collaborators && project.collaborators.length > 0) {
+            const collabEl = document.createElement('span');
+            collabEl.className = 'meta-tags';
+            collabEl.style.marginLeft = '15px';
+            const collabText = Array.isArray(project.collaborators) ? project.collaborators.join(', ') : project.collaborators;
+            collabEl.textContent = 'WITH ' + collabText.toUpperCase();
+            metaRight.appendChild(collabEl);
         }
 
         // Links (Website / GitHub)
